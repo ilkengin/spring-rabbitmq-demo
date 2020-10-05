@@ -4,6 +4,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,6 +27,16 @@ public class SendMessageController {
     {
 		System.out.println("Sending message...");
         rabbitTemplate.convertAndSend(RabbitConfig.topicExchangeName, "foo.bar.baz", "Hello from RabbitMQ!");
+        return "SENT";
+    }
+	
+	@PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String sendMessage(@RequestBody String message)
+    {
+		System.out.println("Sending message...");
+        rabbitTemplate.convertAndSend(RabbitConfig.topicExchangeName, "foo.bar.baz", message);
         return "SENT";
     }
 }
